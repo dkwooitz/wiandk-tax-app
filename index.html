@@ -37,6 +37,12 @@
       <h2>Income</h2>
 
       <div class="field">
+        <label>Read from a document <span class="hint">photo or scan of a W‑2 / 1099</span></label>
+        <input type="file" id="docUpload" accept="image/*" style="width:100%;font-family:var(--sans);font-size:12.5px;color:var(--ink-soft);background:var(--surface);border:1px dashed var(--rule-strong);border-radius:7px;padding:10px 12px;cursor:pointer">
+        <p id="docStatus" class="hint" style="margin-top:6px;min-height:1em"></p>
+      </div>
+
+      <div class="field">
         <label>W‑2 wages <span class="hint">Box 1</span></label>
         <div class="money"><input type="number" id="wages" placeholder="0" min="0" step="1000"></div>
       </div>
@@ -155,5 +161,6 @@
 </div>
 
 <script src="script.js"></script>
+<script src="reader.js"></script>
 </body>
 </html>
