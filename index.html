@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Federal Tax Worksheet · TY2026</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Spectral:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="eyebrow">Federal tax worksheet · Tax year 2026</div>
+    <h1>What you owe, <em>line by line</em> — with the law beside every figure.</h1>
+    <p class="lede">Enter your income once. The worksheet assembles a full federal estimate — income tax, payroll and self-employment tax, surtaxes, and credits — and cites the statute behind each line as it goes.</p>
+    <p class="disclaim">Educational estimate for tax year 2026 (returns filed in 2027), built on IRS Rev. Proc. 2025-32 and the OBBBA. Federal only — no state or local tax. It simplifies several complex areas (AMT, full §199A wage/asset limits, itemized-deduction rules, multi-state). It is not tax-filing software and not tax advice. For an actual return, use filing software or a licensed preparer.</p>
+  </header>
+
+  <div class="grid">
+    <!-- ================= INPUTS ================= -->
+    <section class="panel">
+      <h2>Your situation</h2>
+
+      <div class="field">
+        <label>Filing status</label>
+        <div class="seg" id="statusSeg" role="group" aria-label="Filing status">
+          <button data-status="single" aria-pressed="true">Single</button>
+          <button data-status="mfj" aria-pressed="false">Married · joint</button>
+          <button data-status="hoh" aria-pressed="false">Head of household</button>
+          <button data-status="mfs" aria-pressed="false">Married · separate</button>
+        </div>
+      </div>
+
+      <div class="divider"></div>
+      <h2>Income</h2>
+
+      <div class="field">
+        <label>W‑2 wages <span class="hint">Box 1</span></label>
+        <div class="money"><input type="number" id="wages" placeholder="0" min="0" step="1000"></div>
+      </div>
+      <div class="field">
+        <label>Federal income tax withheld <span class="hint">Box 2</span></label>
+        <div class="money"><input type="number" id="withheld" placeholder="0" min="0" step="500"></div>
+      </div>
+      <div class="field">
+        <label>Net self‑employment income <span class="hint">Schedule C profit</span></label>
+        <div class="money"><input type="number" id="se" placeholder="0" min="0" step="1000"></div>
+      </div>
+      <div class="field">
+        <label>Interest, ordinary dividends, other <span class="hint">taxed as ordinary</span></label>
+        <div class="money"><input type="number" id="ordinv" placeholder="0" min="0" step="500"></div>
+      </div>
+      <div class="field">
+        <label>Qualified dividends + long‑term gains <span class="hint">preferential rate</span></label>
+        <div class="money"><input type="number" id="ltcg" placeholder="0" min="0" step="500"></div>
+      </div>
+      <div class="field">
+        <label>Other above‑the‑line adjustments <span class="hint">HSA, deductible IRA, etc.</span></label>
+        <div class="money"><input type="number" id="adjust" placeholder="0" min="0" step="500"></div>
+      </div>
+      <div class="field">
+        <label>Estimated tax already paid <span class="hint">quarterly 1040‑ES</span></label>
+        <div class="money"><input type="number" id="estpaid" placeholder="0" min="0" step="500"></div>
+      </div>
+
+      <div class="divider"></div>
+      <h2>Deductions &amp; family</h2>
+
+      <div class="field">
+        <label>Itemized deductions, if any <span class="hint">used only if &gt; standard</span></label>
+        <div class="money"><input type="number" id="itemized" placeholder="0" min="0" step="500"></div>
+      </div>
+      <div class="field">
+        <label>Qualifying children under 17</label>
+        <div class="stepper">
+          <button id="kidMinus" aria-label="Fewer children">–</button>
+          <span class="val" id="kidsVal">0</span>
+          <button id="kidPlus" aria-label="More children">+</button>
+        </div>
+      </div>
+      <div class="field">
+        <label>Age 65 or older</label>
+        <div class="checks">
+          <label class="chk"><input type="checkbox" id="age65self"> You are 65+</label>
+          <label class="chk" id="age65spouseWrap" style="display:none"><input type="checkbox" id="age65spouse"> Spouse is 65+</label>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= WORKSHEET ================= -->
+    <section class="worksheet" aria-live="polite">
+      <div class="ws-pad">
+        <div class="ws-group">
+          <div class="ws-caption">Income</div>
+          <div id="incomeRows"></div>
+        </div>
+        <div class="ws-group">
+          <div class="ws-caption">Adjustments &amp; deductions</div>
+          <div id="deductRows"></div>
+        </div>
+        <div class="ws-group">
+          <div class="ws-caption">Tax on income</div>
+          <div id="taxRows"></div>
+        </div>
+        <div class="ws-group">
+          <div class="ws-caption">Other federal taxes</div>
+          <div id="otherRows"></div>
+        </div>
+        <div class="ws-group">
+          <div class="ws-caption">Credits &amp; total</div>
+          <div id="creditRows"></div>
+        </div>
+
+        <div class="result" id="result">
+          <div>
+            <div class="rk" id="resultKicker">Estimated refund</div>
+            <div class="rsub" id="resultSub">Withholding and estimated payments exceed your income‑tax liability.</div>
+          </div>
+          <div class="big" id="resultBig">$0</div>
+        </div>
+
+        <div class="memo" id="memo"></div>
+
+        <div class="effrate" id="effrate"></div>
+      </div>
+    </section>
+  </div>
+
+  <!-- ================= LEGISLATION ================= -->
+  <section class="legis">
+    <div class="eyebrow">The statute behind the math</div>
+    <h2>Relevant laws &amp; legislation</h2>
+    <p class="lede">Every line in the worksheet traces to the Internal Revenue Code (Title 26, U.S. Code) as amended. The two acts below reshaped most of these provisions for 2026.</p>
+    <div class="laws">
+      <div class="law"><div class="tag">Pub. L. 119‑21</div><div class="nm">One Big Beautiful Bill Act (OBBBA), 2025</div><p>Signed July 4, 2025. Made the TCJA individual rate structure and the higher standard deduction permanent, raised the Child Tax Credit to $2,200, kept the §199A deduction, and added temporary deductions for tips, overtime, car‑loan interest, and seniors (2025–2028).</p></div>
+      <div class="law"><div class="tag">Pub. L. 115‑97</div><div class="nm">Tax Cuts and Jobs Act (TCJA), 2017</div><p>Set the seven‑bracket 10–37% structure, near‑doubled the standard deduction, zeroed the personal exemption, and created §199A. Scheduled to sunset after 2025 until OBBBA made most of it permanent.</p></div>
+      <div class="law"><div class="tag">Rev. Proc. 2025‑32</div><div class="nm">2026 inflation adjustments</div><p>The IRS procedure fixing the 2026 bracket thresholds, standard deduction, capital‑gains breakpoints, EITC, and 60+ other parameters used throughout this worksheet.</p></div>
+      <div class="law"><div class="tag">IRC §1</div><div class="nm">Income tax rates &amp; brackets</div><p>Imposes the graduated tax on taxable income; §1(h) sets the preferential 0/15/20% rates for long‑term capital gains and qualified dividends.</p></div>
+      <div class="law"><div class="tag">IRC §63</div><div class="nm">Taxable income &amp; standard deduction</div><p>Defines taxable income as AGI less the greater of the standard or itemized deductions, plus the additional standard amount for taxpayers 65+.</p></div>
+      <div class="law"><div class="tag">IRC §1401 · §1402</div><div class="nm">Self‑employment (SECA) tax</div><p>12.4% Social Security on net earnings up to the wage base + 2.9% Medicare on all net earnings. Net earnings = 92.35% of profit; no tax under $400.</p></div>
+      <div class="law"><div class="tag">IRC §164(f)</div><div class="nm">Deduction for ½ of SE tax</div><p>Lets the self‑employed deduct the employer‑equivalent half of their SE tax above the line, reducing AGI.</p></div>
+      <div class="law"><div class="tag">IRC §3101 · §3111 · §3121</div><div class="nm">FICA payroll tax</div><p>The employee/employer Social Security (6.2% each, to the wage base) and Medicare (1.45% each) taxes withheld from W‑2 wages.</p></div>
+      <div class="law"><div class="tag">IRC §1401(b)(2) · §3101(b)(2)</div><div class="nm">Additional Medicare Tax</div><p>An extra 0.9% on wages and SE earnings above $200k (single/HoH), $250k (joint), or $125k (separate). Employee side only; not indexed.</p></div>
+      <div class="law"><div class="tag">IRC §1411</div><div class="nm">Net Investment Income Tax</div><p>3.8% on the lesser of net investment income or MAGI over the same $200k/$250k/$125k thresholds. Enacted 2010; not indexed.</p></div>
+      <div class="law"><div class="tag">IRC §24</div><div class="nm">Child Tax Credit</div><p>$2,200 per qualifying child under 17 (2026), up to $1,700 refundable, phasing out above $200k/$400k of MAGI.</p></div>
+      <div class="law"><div class="tag">IRC §199A</div><div class="nm">Qualified Business Income deduction</div><p>Up to 20% of pass‑through / self‑employment income, subject to wage, asset, and service‑business limits above the income threshold.</p></div>
+      <div class="law"><div class="tag">IRC §55–59</div><div class="nm">Alternative Minimum Tax</div><p>A parallel calculation with its own exemption ($90,100 single / $140,200 joint in 2026). Not modeled here — flagged when income is high enough to warrant checking.</p></div>
+    </div>
+    <p class="foot">
+      Figures reflect tax year 2026 per IRS Revenue Procedure 2025‑32 and the One Big Beautiful Bill Act. Social Security wage base $184,500; Additional Medicare and NIIT thresholds $200,000 / $250,000 / $125,000 (not inflation‑indexed). The worksheet omits state and local income tax, the AMT computation, and several itemized‑deduction and §199A limitations. Verify anything you rely on against <a href="https://www.irs.gov" target="_blank" rel="noopener">irs.gov</a> or a licensed preparer. Not tax advice.
+    </p>
+  </section>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>

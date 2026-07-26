@@ -1,0 +1,182 @@
+  :root{
+    --paper:#F4F5F1;
+    --surface:#FFFFFF;
+    --ink:#16211C;
+    --ink-soft:#5B655F;
+    --ink-faint:#8A928C;
+    --rule:#DBDFD6;
+    --rule-strong:#C3C9BD;
+    --accent:#1F5C43;      /* treasury green */
+    --accent-wash:#EAF1EC;
+    --refund:#1F7A4D;
+    --owed:#9B3020;
+    --owed-wash:#F6ECE9;
+    --shadow:0 1px 2px rgba(22,33,28,.05), 0 8px 30px rgba(22,33,28,.06);
+    --mono:"IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+    --sans:"Inter", system-ui, -apple-system, sans-serif;
+    --serif:"Spectral", Georgia, serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{-webkit-text-size-adjust:100%}
+  body{
+    background:var(--paper);
+    color:var(--ink);
+    font-family:var(--sans);
+    font-size:15px;
+    line-height:1.5;
+    -webkit-font-smoothing:antialiased;
+    padding:0 0 80px;
+  }
+  .wrap{max-width:1120px;margin:0 auto;padding:0 24px}
+
+  /* ---- Header ---- */
+  header{padding:56px 0 34px;border-bottom:1px solid var(--rule)}
+  .eyebrow{
+    font-family:var(--mono);font-size:11.5px;letter-spacing:.16em;
+    text-transform:uppercase;color:var(--accent);font-weight:500;
+    display:flex;align-items:center;gap:10px;
+  }
+  .eyebrow::after{content:"";height:1px;flex:1;background:var(--rule);max-width:260px}
+  h1{
+    font-family:var(--serif);font-weight:600;font-size:clamp(30px,5vw,46px);
+    line-height:1.04;letter-spacing:-.01em;margin:16px 0 12px;max-width:16ch;
+  }
+  h1 em{font-style:italic;color:var(--accent)}
+  .lede{color:var(--ink-soft);max-width:56ch;font-size:15.5px}
+  .disclaim{
+    margin-top:18px;font-size:12.5px;color:var(--ink-faint);
+    max-width:70ch;border-left:2px solid var(--rule-strong);padding-left:12px;
+  }
+
+  /* ---- Grid ---- */
+  .grid{display:grid;grid-template-columns:340px 1fr;gap:40px;margin-top:38px;align-items:start}
+  @media(max-width:880px){.grid{grid-template-columns:1fr;gap:32px}}
+
+  /* ---- Inputs ---- */
+  .panel{position:sticky;top:24px}
+  @media(max-width:880px){.panel{position:static}}
+  .panel h2, .worksheet h2{
+    font-family:var(--mono);font-size:11.5px;letter-spacing:.14em;text-transform:uppercase;
+    color:var(--ink-faint);font-weight:500;margin-bottom:16px;
+  }
+  .field{margin-bottom:16px}
+  .field label{display:block;font-size:13px;font-weight:500;color:var(--ink);margin-bottom:6px}
+  .field .hint{font-family:var(--mono);font-size:10.5px;color:var(--ink-faint);font-weight:400;letter-spacing:.02em}
+  .money{position:relative}
+  .money::before{
+    content:"$";position:absolute;left:13px;top:50%;transform:translateY(-50%);
+    color:var(--ink-faint);font-family:var(--mono);font-size:14px;pointer-events:none;
+  }
+  input[type=number]{
+    width:100%;font-family:var(--mono);font-size:15px;color:var(--ink);
+    background:var(--surface);border:1px solid var(--rule-strong);border-radius:7px;
+    padding:11px 12px 11px 26px;transition:border-color .15s, box-shadow .15s;
+    -moz-appearance:textfield;
+  }
+  input.plain{padding-left:12px}
+  input[type=number]::-webkit-outer-spin-button,
+  input[type=number]::-webkit-inner-spin-button{-webkit-appearance:none;margin:0}
+  input:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-wash)}
+
+  .seg{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+  .seg button{
+    font-family:var(--sans);font-size:12.5px;font-weight:500;color:var(--ink-soft);
+    background:var(--surface);border:1px solid var(--rule-strong);border-radius:7px;
+    padding:9px 6px;cursor:pointer;transition:.14s;
+  }
+  .seg button:hover{border-color:var(--accent)}
+  .seg button[aria-pressed=true]{background:var(--accent);border-color:var(--accent);color:#fff}
+
+  .checks{display:flex;flex-direction:column;gap:9px;margin-top:2px}
+  .chk{display:flex;align-items:center;gap:9px;font-size:13px;color:var(--ink);cursor:pointer}
+  .chk input{width:16px;height:16px;accent-color:var(--accent);cursor:pointer}
+  .stepper{display:flex;align-items:center;gap:10px}
+  .stepper button{
+    width:34px;height:34px;border:1px solid var(--rule-strong);background:var(--surface);
+    border-radius:7px;font-size:18px;color:var(--ink);cursor:pointer;line-height:1;
+    display:flex;align-items:center;justify-content:center;transition:.14s;
+  }
+  .stepper button:hover{border-color:var(--accent);color:var(--accent)}
+  .stepper .val{font-family:var(--mono);font-size:16px;min-width:26px;text-align:center}
+  .divider{height:1px;background:var(--rule);margin:22px 0}
+
+  /* ---- Worksheet ledger ---- */
+  .worksheet{background:var(--surface);border:1px solid var(--rule);border-radius:14px;box-shadow:var(--shadow);overflow:hidden}
+  .ws-pad{padding:26px 28px}
+  @media(max-width:520px){.ws-pad{padding:20px 16px}}
+  .ws-group{margin-bottom:22px}
+  .ws-group:last-child{margin-bottom:0}
+  .ws-caption{
+    font-family:var(--mono);font-size:11px;letter-spacing:.13em;text-transform:uppercase;
+    color:var(--accent);font-weight:500;margin-bottom:10px;padding-bottom:8px;
+    border-bottom:1px solid var(--rule);
+  }
+  .row{
+    display:grid;grid-template-columns:1fr auto;gap:12px 16px;
+    padding:7px 0;align-items:baseline;
+  }
+  .row .rlabel{font-size:13.5px;color:var(--ink)}
+  .row .cite{
+    display:block;font-family:var(--mono);font-size:10.5px;color:var(--ink-faint);
+    letter-spacing:.01em;margin-top:2px;
+  }
+  .row .amt{
+    font-family:var(--mono);font-size:14px;color:var(--ink);text-align:right;
+    font-variant-numeric:tabular-nums;white-space:nowrap;
+  }
+  .row .amt.neg{color:var(--owed)}
+  .row.sub{border-top:1px solid var(--rule);margin-top:5px;padding-top:11px}
+  .row.sub .rlabel{font-weight:600}
+  .row.sub .amt{font-weight:600}
+  .row.muted .rlabel{color:var(--ink-soft)}
+  .row.muted .amt{color:var(--ink-soft)}
+  .row.hidden-row{display:none}
+  .bracket-detail{
+    grid-column:1/-1;font-family:var(--mono);font-size:11px;color:var(--ink-faint);
+    background:var(--paper);border-radius:6px;padding:8px 11px;margin-top:4px;line-height:1.7;
+  }
+  .bracket-detail span{display:inline-block;min-width:150px}
+
+  /* ---- Result ---- */
+  .result{
+    margin-top:24px;border-radius:14px;padding:24px 28px;
+    display:flex;align-items:center;justify-content:space-between;gap:20px;flex-wrap:wrap;
+    border:1px solid var(--rule);background:var(--accent-wash);
+    transition:background .3s, border-color .3s;
+  }
+  .result.owed{background:var(--owed-wash)}
+  .result .rk{font-family:var(--serif);font-size:20px;font-weight:600}
+  .result .rsub{font-size:12.5px;color:var(--ink-soft);margin-top:3px;max-width:34ch}
+  .result .big{
+    font-family:var(--mono);font-weight:600;font-size:clamp(28px,6vw,40px);
+    font-variant-numeric:tabular-nums;color:var(--refund);letter-spacing:-.01em;
+  }
+  .result.owed .big{color:var(--owed)}
+  .result .big small{font-size:16px;font-weight:500}
+
+  .memo{
+    margin-top:16px;font-size:12.5px;color:var(--ink-soft);
+    background:var(--paper);border-radius:10px;padding:14px 18px;line-height:1.6;
+  }
+  .memo b{color:var(--ink);font-weight:600}
+  .memo .mrow{display:flex;justify-content:space-between;gap:12px;padding:3px 0}
+  .memo .mrow .mmono{font-family:var(--mono);font-variant-numeric:tabular-nums}
+
+  .effrate{display:flex;gap:26px;flex-wrap:wrap;margin-top:18px;padding-top:18px;border-top:1px solid var(--rule)}
+  .effrate .stat .n{font-family:var(--mono);font-size:20px;font-weight:500;color:var(--ink)}
+  .effrate .stat .l{font-size:11px;color:var(--ink-faint);letter-spacing:.06em;text-transform:uppercase;margin-top:2px}
+
+  /* ---- Legislation ---- */
+  .legis{margin-top:56px;padding-top:40px;border-top:1px solid var(--rule)}
+  .legis .eyebrow::after{max-width:none}
+  .legis h2{font-family:var(--serif);font-weight:600;font-size:26px;margin:14px 0 6px}
+  .legis .lede{margin-bottom:26px}
+  .laws{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:2px;background:var(--rule);border:1px solid var(--rule);border-radius:12px;overflow:hidden}
+  .law{background:var(--surface);padding:18px 20px}
+  .law .tag{font-family:var(--mono);font-size:12px;font-weight:600;color:var(--accent);letter-spacing:.02em}
+  .law .nm{font-weight:600;font-size:13.5px;margin:5px 0 5px}
+  .law p{font-size:12.5px;color:var(--ink-soft);line-height:1.55}
+  .foot{margin-top:34px;font-size:12px;color:var(--ink-faint);line-height:1.6;max-width:78ch}
+  .foot a{color:var(--accent)}
+
+  @media (prefers-reduced-motion: reduce){*{transition:none!important;animation:none!important}}
